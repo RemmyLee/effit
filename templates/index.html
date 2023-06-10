@@ -48,9 +48,13 @@
                     {% else %}
                     <a class="title may-blank loggedin" href="/c/{{ community.name }}/p/{{ post.slug }}">{{ post.title }}</a>
                     {% endif %}
-                    </h3>    
-                <span class="domain">(<a href="{{ url_for('community_posts', community_name=post.community.name) }}">self.{{ post.community.name }}</a>)</span>
-                <p class="tagline">
+                    </h3>
+                    {% if post.is_link_post %}
+                    <span class="domain">(<a href="{{ post.link }}">{{ post.link }}</a>)</span>
+                    {% else %}
+                    <span class="domain">(<a href="{{ url_for('community_posts', community_name=post.community.name) }}">self.{{ post.community.name }}</a>)</span>
+                    {% endif %}
+                    <p class="tagline">
                     <span>{{ post.score }} points</span> 
                     submitted <time datetime="{{ post.created_at.isoformat() }}">{{ post.created_at }}</time>
                     by <a href="{{ url_for('user_posts', username=post.author.username) }}" class="author may-blank id-t2_d2kpf">{{ post.author.username }}</a>
