@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Effit</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplemde@1.11.2/dist/simplemde.min.css">
+    <script src="/static/showdown.min.js"></script>
+    <script src="/static/simplemde.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('index') }}" class="logo">Effit</a>
+        <ul>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            {% if 'username' not in session %}
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+                <li><a href="{{ url_for('register') }}">Register</a></li>
+            {% else %}
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    
+    <main>
+        <div id="container">
+            <div id="content">
+                {% block content %}
+                {% endblock %}
+            </div>
+            <div id="sidebar">
+                {% if 'username' in session %}
+                <div class="create-form">
+                    <h2>Create a Community</h2>
+                    <form action="/create_community" method="post">
+                        <label for="name">Name:</label><br>
+                        <input type="text" id="name" name="name"><br>
+                        <label for="description">Description:</label><br>
+                        <textarea id="description" name="description"></textarea><br>
+                        <input type="submit" value="Create">
+                    </form>
+                </div>
+                <div class="create-form">
+                    <h2>Create a Post</h2>
+                    <form action="/post" method="post">
+                        <label for="title">Title:</label><br>
+                        <input type="text" id="title" name="title"><br>
+                        <label for="content">Content:</label><br>
+                        <textarea id="description" name="content"></textarea><br>
+                        <input type="hidden" name="community_id" value="{{ default_community_id }}">
+                        <input type="submit" value="Create">
+                    </form>
+                </div>
+                {% else %}
+                <p>You must be logged in to create a post or community!</p>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+</body>
+</html>

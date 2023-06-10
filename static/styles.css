@@ -1,0 +1,662 @@
+/* Reset default browser styles */
+body,
+ul,
+ol,
+li,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+form,
+fieldset,
+input,
+textarea,
+button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+body {
+  background-color: #ffffff;
+  color: #000000;
+  font: normal x-small verdana,arial,helvetica,sans-serif;
+  font-style: normal;
+  font-variant-caps: normal;
+  font-weight: normal;
+  font-stretch: normal;
+  font-size: x-small;
+  line-height: normal;
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size-adjust: none;
+  font-kerning: auto;
+  font-optical-sizing: auto;
+  font-variant-alternates: normal;
+  font-variant-east-asian: normal;
+  font-variant-emoji: ;
+  font-variant-ligatures: normal;
+  font-variant-numeric: normal;
+  font-variant-position: normal;
+  font-language-override: normal;
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+  line-height: 1.4;
+}
+
+#header {
+  background-color: #cee3f8;
+  padding: 10px 0;
+  text-align: center;
+}
+
+.post,
+.comment {
+  background-color: #ffffff;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #cccccc;
+  font-size: medium;
+  font-family: Arial,sans-serif;
+  display: flex; /* add this */
+  align-items: start; /* add this */
+}
+
+.post h3,
+.comment h3 {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.post h3 a,
+.comment h3 a {
+  color: #336699;
+  text-decoration: none;
+}
+
+.post h3 a:hover,
+.comment h3 a:hover {
+  text-decoration: underline;
+}
+
+.post-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.post-details .vote {
+    order: 1;
+}
+
+.post-details .post-content {
+    order: 2;
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #000000;
+}
+
+a {
+  color: #336699;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+#container {
+  display: flex;
+}
+
+#sidebar {
+  flex: 0 0 300px;
+  order: 2;
+}
+
+#content {
+  flex: 1;
+  margin-right: 20px;
+  order: 1;
+}
+
+/* Styling for the navigation */
+nav {
+    background-color: #cee3f8;
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+}
+
+nav .logo {
+    font-weight: bold;
+    font-size: 20px;
+    color: #000000;
+    text-decoration: none;
+    margin-right: 20px;
+    margin-left: 10px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+nav ul li a {
+    color: #000000;
+    text-decoration: none;
+    padding: 5px 10px;
+}
+
+nav ul li a:hover {
+    background-color: #336699;
+    color: #ffffff;
+}
+
+
+/* Styling for the main content */
+main {
+  padding: 10px;
+}
+
+#top-communities {
+  margin-bottom: 20px;
+}
+
+#top-communities h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+#top-communities ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#top-communities ul li {
+  margin-bottom: 5px;
+}
+
+#top-communities ul li a {
+  color: #336699;
+  text-decoration: none;
+}
+
+#top-communities ul li a:hover {
+  text-decoration: underline;
+}
+
+#posts {
+  margin-bottom: 20px;
+}
+
+
+
+#posts h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.post .title {
+    font-size: medium;
+    font-weight: normal;
+    margin-bottom: 1px;
+    margin-bottom: 5px;
+}
+
+.post .title a {
+  color: #336699;
+  text-decoration: none;
+}
+
+.post .title a:hover {
+  text-decoration: underline;
+}
+
+.domain {
+    color: #888;
+    display: inline; /* or display: inline-block; */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    max-width: 19em;
+  }
+  
+.domain a {
+    color: #888;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    max-width: 19em;
+    text-decoration: none;
+}
+
+.domain a:hover {
+    color: #888;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    max-width: 19em;
+    text-decoration: underline;
+}
+
+.post p {
+  margin-bottom: 10px;
+  font-size: medium;
+  font-family: Segoe,"PT Sans",Arial,sans-serif;
+}
+
+.post .tagline {
+  font-size: 12px;
+}
+
+.flat-list.buttons {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.flat-list.buttons li {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.flat-list.buttons li a {
+  display: inline-block;
+  padding: 3px 8px;
+  font-size: 12px;
+  line-height: 1;
+  color: #336699;
+  text-decoration: none;
+  background-color: transparent;
+  border: 1px solid #cccccc;
+  border-radius: 3px;
+  transition: background-color 0.2s ease;
+}
+
+#description {
+  border: 1px solid #cccccc;
+}
+
+#name {
+    border: 1px solid #cccccc;
+}
+#title {
+    border: 1px solid #cccccc;
+}
+
+.flat-list.buttons li a:hover {
+  background-color: #f0f0f0;
+}
+
+.flat-list.buttons .comments {
+  padding: 3px 8px;
+  background-color: #cee3f8;
+  color: #336699;
+  border: 1px solid #cee3f8;
+  border-radius: 3px;
+}
+
+.flat-list.buttons .comments:hover {
+  background-color: #336699;
+  color: #ffffff;
+  border-color: #336699;
+}
+
+.flat-list.buttons .save-button,
+.flat-list.buttons .give-gold-button,
+.flat-list.buttons .report-button,
+.flat-list.buttons .crosspost-button {
+  background-color: #ffffff;
+}
+
+.flat-list.buttons .save-button:hover,
+.flat-list.buttons .give-gold-button:hover,
+.flat-list.buttons .report-button:hover,
+.flat-list.buttons .crosspost-button:hover {
+  background-color: #f0f0f0;
+}
+
+.flat-list.buttons .login-required {
+  cursor: pointer;
+}
+
+.create-form {
+  margin-bottom: 20px;
+}
+
+.create-form h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.create-form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-form label {
+  margin-bottom: 5px;
+}
+
+.create-form input[type="text"],
+.create-form textarea {
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.create-form input[type="submit"] {
+  padding: 8px 12px;
+  font-size: 14px;
+  background-color: #336699;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+}
+
+.create-form input[type="submit"]:hover {
+  background-color: #335588;
+}
+
+/* Additional styling for better visual separation */
+.create-form {
+  border-top: 1px solid #cccccc;
+  padding-top: 20px;
+  margin-bottom: 20px;
+}
+
+.create-form:first-child {
+  padding-top: 0;
+}
+
+.create-form textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+.create-form input[type="text"],
+.create-form textarea,
+.create-form input[type="submit"] {
+  border-radius: 3px;
+}
+
+/* Custom styling for the Create Post section */
+.create-form.post-form label {
+  font-weight: bold;
+}
+
+.create-form.post-form input[type="text"],
+.create-form.post-form textarea,
+.create-form.post-form input[type="submit"] {
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  transition: border-color 0.2s ease;
+}
+
+.create-form.post-form input[type="text"]:focus,
+.create-form.post-form textarea:focus {
+  border-color: #336699;
+  outline: none;
+}
+
+.create-form.post-form input[type="submit"] {
+  background-color: #0079d3;
+}
+
+.create-form.post-form input[type="submit"]:hover {
+  background-color: #005cbf;
+}
+
+.create-form.post-form input[type="submit"]:focus {
+  border-color: #003d80;
+}
+
+/* Custom styling for the Create Community section */
+.create-form.community-form label {
+  font-weight: bold;
+}
+
+.create-form.community-form input[type="text"],
+.create-form.community-form textarea,
+.create-form.community-form input[type="submit"] {
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  transition: border-color 0.2s ease;
+}
+
+.create-form.community-form input[type="text"]:focus,
+.create-form.community-form textarea:focus {
+  border-color: #336699;
+  outline: none;
+}
+
+.create-form.community-form input[type="submit"] {
+  background-color: #0079d3;
+}
+
+.create-form.community-form input[type="submit"]:hover {
+  background-color: #005cbf;
+}
+
+.create-form.community-form input[type="submit"]:focus {
+  border-color: #003d80;
+}
+.top-communities {
+    margin-bottom: 20px;
+  }
+  
+  .community-list {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  }
+  
+  .community {
+    flex: 0 0 auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .community img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 5px;
+  }
+  
+  .community-name {
+    font-size: 12px;
+  }
+  
+  /* Add scrollbar styles */
+  .community-list::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .community-list::-webkit-scrollbar-track {
+    background-color: var(--scrollbar-track);
+  }
+  
+  .community-list::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+    border-radius: 4px;
+  }
+  
+  .community-list::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb-hover);
+  }
+  .comment-form {
+    margin-top: 20px;
+  }
+  
+  .comment-form textarea {
+    width: 100%;
+    resize: vertical;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  
+  .comment-form input[type="submit"] {
+    margin-top: 10px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    background-color: #0079d3;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .comment-form input[type="submit"]:hover {
+    background-color: #005da6;
+  }
+
+  
+  .comment img {
+    max-width: 60%;
+    height: auto;
+  }
+
+  .hidden {
+    display: none !important;
+}
+
+.flashes {
+    list-style-type: none;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.flashes li {
+    margin-bottom: 5px;
+}
+
+.error {
+    color: red;
+}
+
+.success {
+    color: green;
+}
+
+.info {
+    color: blue;
+}
+.form-container {
+    width: 400px;
+    margin: 0 auto;
+  }
+  
+  .reddit-form {
+    background-color: #ffffff;
+    padding: 20px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+  }
+  
+  .reddit-input {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    border: 1px solid #cccccc;
+    border-radius: 3px;
+  }
+  
+  .reddit-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #0079d3;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .reddit-button:hover {
+    background-color: #005cbf;
+  }
+  
+  .form-group label {
+    font-weight: bold;
+  }
+  
+  .form-group p {
+    margin-top: 10px;
+  }
+  
+  .form-group p a {
+    color: #0079d3;
+    text-decoration: none;
+  }
+  
+  .form-group p a:hover {
+    text-decoration: underline;
+  }
+  .vote {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    margin-right: 10px;
+  }
+  
+  .upvote,
+  .downvote {
+    height: 20px;
+    border: none;
+    background: none;
+    color: #828282;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+  }
+  
+  .upvote:focus,
+  .downvote:focus {
+    outline: none;
+  }
+  
+  .score {
+    font-size: 14px;
+    color: #828282;
+  }
+  
