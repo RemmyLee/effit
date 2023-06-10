@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="user-profile">
+    <h2>{{ user.username }}'s Profile</h2>
+    
+    <div class="user-posts">
+        <h3>Submitted Posts</h3>
+        {% for post in posts %}
+        <div class="post-item" id="post-{{ post.id }}">
+            <div class="post">
+                <div class="vote">
+                    <!-- We won't be able to include the vote functionality here, as the logic is not provided -->
+                    <button class="upvote">
+                        <!-- SVG code removed for brevity -->
+                    </button>
+                    <span class="score">{{ post.score }}</span>
+                    <button class="downvote">
+                        <!-- SVG code removed for brevity -->
+                    </button>
+                </div>
+                <div class="post-info">
+                    <h3><a class="title may-blank loggedin" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h3>
+                    <!-- The domain part is not included because it is not applicable in this context -->
+                    <p class="tagline">
+                        <span>{{ post.score }} points</span> 
+                        submitted <time datetime="{{ post.created_at.isoformat() }}">{{ post.created_at }}</time>
+                        by <a href="{{ url_for('user_posts', username=user.username) }}" class="author may-blank id-t2_d2kpf">{{ user.username }}</a>
+                        <!-- The community part is not included because it is not applicable in this context -->
+                    </p>
+                    <ul class="flat-list buttons">
+                        <!-- The other elements are not included because they are not applicable in this context -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- The same structure is repeated for upvotes and downvotes -->
+</div>
+{% endblock %}

@@ -54,6 +54,8 @@ class Post(db.Model):
     downvotes = db.Column(db.Integer, default=0)
     comments = db.relationship("Comment", backref="post", lazy=True)
     slug = db.Column(db.String(120), nullable=False)
+    link = db.Column(db.String(500))
+    is_link_post = db.Column(db.Boolean, default=False)
 
     @property
     def score(self):
@@ -83,6 +85,10 @@ class Vote(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
     post_id = db.Column(db.Integer, db.ForeignKey("post.id"), primary_key=True)
     vote_value = db.Column(db.Integer)
+    upvote = db.Column(db.Boolean)
+    downvote = db.Column(db.Boolean)
+    user = db.relationship("User", backref="votes")
+    post = db.relationship("Post", backref="votes")
 
 
 @app.route("/")
@@ -116,6 +122,9 @@ def post():
     if "username" not in session:
         return "You must be logged in to post!", 401
     title = request.form.get("title")
+    link = request.form.get("link")
+    is_link_post = bool(link)
+    print(f"Link: {link}, is_link_post: {is_link_post}")
     slug = slugify(title)
     content = request.form.get("content")
     community_id = request.form.get("community_id")
@@ -125,6 +134,7 @@ def post():
     user = User.query.filter_by(username=session["username"]).first()
     post = Post(
         title=title,
+        link=link,
         slug=f"{slugify(title)}-{str(uuid.uuid4())[:8]}",
         content=content,
         user_id=user.id,
@@ -137,7 +147,11 @@ def post():
     community = Community.query.filter_by(id=community_id).first()
 
     return render_template(
-        "post_detail.html", post=post, community=community, community_id=community_id
+        "post_detail.html",
+        post=post,
+        community=community,
+        community_id=community_id,
+        is_link_post=is_link_post,
     )
 
 
@@ -155,6 +169,7 @@ def create_post():
 
     if request.method == "POST":
         title = request.form.get("title")
+        link = request.form.get("link")
         if community_id is None:
             community = Community.query.filter_by(name="effit").first()
             community_id = community.id if community else None
@@ -212,6 +227,7 @@ def post_detail(community_name, post_slug):
 
         if action == "edit":
             title = request.form.get("title")
+            link = request.form.get("link")
             content = request.form.get("content")
             post.title = title
             post.content = content
@@ -250,6 +266,7 @@ def edit_post(post_id):
     if request.method == "POST":
         # Update the post content with the submitted form data
         post.title = request.form.get("title")
+        link = request.form.get("link")
         post.content = request.form.get("content")
         print(post.content)
         db.session.commit()
@@ -380,18 +397,22 @@ def upvote_post(community_name, post_slug):
     user = User.query.filter_by(username=session["username"]).first()
     vote = Vote.query.filter_by(user_id=user.id, post_id=post.id).first()
     if vote is None:
-        vote = Vote(user_id=user.id, post_id=post.id, vote_value=1)
-        post.upvotes += 1
+        vote = Vote(user_id=user.id, post_id=post.id, upvote=True, downvote=False)
         db.session.add(vote)
+        post.upvotes += 1
     else:
-        if vote.vote_value == 1:
-            vote.vote_value = 0
+        if vote.upvote:  # If already upvoted, revert the vote
+            vote.upvote = False
             post.upvotes -= 1
-        else:
-            vote.vote_value = 1
+        else:  # If not upvoted yet
+            if vote.downvote:  # If changing vote from downvote to upvote
+                vote.downvote = False
+                post.downvotes -= 1
+            vote.upvote = True
             post.upvotes += 1
     db.session.commit()
-    return {"score": post.score}, 200
+    post_score = post.upvotes - post.downvotes  # Calculate post score
+    return {"score": post_score}, 200
 
 
 @app.route(
@@ -404,25 +425,37 @@ def downvote_post(community_name, post_slug):
     user = User.query.filter_by(username=session["username"]).first()
     vote = Vote.query.filter_by(user_id=user.id, post_id=post.id).first()
     if vote is None:
-        vote = Vote(user_id=user.id, post_id=post.id, vote_value=-1)
-        post.downvotes += 1
+        vote = Vote(user_id=user.id, post_id=post.id, upvote=False, downvote=True)
         db.session.add(vote)
+        post.downvotes += 1
     else:
-        if vote.vote_value == -1:
-            vote.vote_value = 0
+        if vote.downvote:  # If already downvoted, revert the vote
+            vote.downvote = False
             post.downvotes -= 1
-        else:
-            vote.vote_value = -1
+        else:  # If not downvoted yet
+            if vote.upvote:  # If changing vote from upvote to downvote
+                vote.upvote = False
+                post.upvotes -= 1
+            vote.downvote = True
             post.downvotes += 1
     db.session.commit()
-    return {"score": post.score}, 200
+    post_score = post.upvotes - post.downvotes  # Calculate post score
+    return {"score": post_score}, 200
 
 
 @app.route("/user/<string:username>/posts")
 def user_posts(username):
     user = User.query.filter_by(username=username).first_or_404()
     posts = Post.query.filter_by(user_id=user.id).all()
-    return render_template("user_posts.html", posts=posts, user=user)
+    upvotes = Vote.query.filter_by(user_id=user.id, vote_value=1).all()
+    downvotes = Vote.query.filter_by(user_id=user.id, vote_value=-1).all()
+    return render_template(
+        "user_profile.html",
+        posts=posts,
+        user=user,
+        upvotes=upvotes,
+        downvotes=downvotes,
+    )
 
 
 if __name__ == "__main__":
