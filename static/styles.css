@@ -36,7 +36,6 @@ body {
   font-optical-sizing: auto;
   font-variant-alternates: normal;
   font-variant-east-asian: normal;
-  font-variant-emoji: ;
   font-variant-ligatures: normal;
   font-variant-numeric: normal;
   font-variant-position: normal;
@@ -106,6 +105,10 @@ body {
   max-width: 100vw;
   padding: 10px;
   flex: auto;
+}
+
+.post-content img {
+  max-width: 100%;
 }
 
 
@@ -593,14 +596,14 @@ main {
     margin: 0 auto;
   }
   
-  .reddit-form {
+  .rs-form {
     background-color: #ffffff;
     padding: 20px;
     border: 1px solid #cccccc;
     border-radius: 5px;
   }
   
-  .reddit-input {
+  .rs-input {
     display: block;
     width: 100%;
     padding: 8px;
@@ -610,7 +613,7 @@ main {
     border-radius: 3px;
   }
   
-  .reddit-button {
+  .rs-button {
     display: inline-block;
     padding: 10px 20px;
     font-size: 14px;
@@ -622,7 +625,7 @@ main {
     cursor: pointer;
   }
   
-  .reddit-button:hover {
+  .rs-button:hover {
     background-color: #005cbf;
   }
   

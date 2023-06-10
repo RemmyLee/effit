@@ -48,7 +48,7 @@
                     <span>{{ post.score }} points</span> 
                     submitted <time datetime="{{ post.created_at.isoformat() }}">{{ post.created_at }}</time>
                     by <a href="{{ url_for('user_posts', username=post.author.username) }}" class="author may-blank id-t2_d2kpf">{{ post.author.username }}</a>
-                    to <a href="{{ url_for('community_posts', community_name=post.community.name) }}" class="subreddit hover may-blank">{{ post.community.name }}</a>
+                    to <a href="{{ url_for('community_posts', community_name=post.community.name) }}" class="subrs hover may-blank">{{ post.community.name }}</a>
                 </p>
                 <ul class="flat-list buttons">
                     <li class="first">
