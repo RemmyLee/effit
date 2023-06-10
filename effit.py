@@ -112,6 +112,7 @@ def index():
 
 @app.route("/post", methods=["POST"])
 def post():
+    community_id = request.args.get("community_id")
     if "username" not in session:
         return "You must be logged in to post!", 401
     title = request.form.get("title")
@@ -135,7 +136,47 @@ def post():
     # Retrieve the community associated with the post
     community = Community.query.filter_by(id=community_id).first()
 
-    return render_template("post_detail.html", post=post, community=community)
+    return render_template(
+        "post_detail.html", post=post, community=community, community_id=community_id
+    )
+
+
+@app.route("/post/create", methods=["GET", "POST"])
+def create_post():
+    # If method is POST, assign the community_id to the one in the form
+    if request.method == "POST":
+        community_id = request.form.get("community_id")
+    else:
+        community_id = request.args.get("community_id")
+
+    print("Create: " + community_id)
+    if "username" not in session:
+        return "You must be logged in to create a post!", 401
+
+    if request.method == "POST":
+        title = request.form.get("title")
+        if community_id is None:
+            community = Community.query.filter_by(name="effit").first()
+            community_id = community.id if community else None
+
+        # Get the user and community from the database
+        user = User.query.filter_by(username=session["username"]).first()
+        community = Community.query.filter_by(id=community_id).first()
+        print(community.name)
+
+        if community is None:
+            return f"Community not found!", 404
+
+        return redirect(
+            url_for(
+                "create_post", community_name=community.name, community_id=community_id
+            )
+        )
+
+    communities = Community.query.all()
+    return render_template(
+        "create_post.html", communities=communities, community_id=community_id
+    )
 
 
 @app.route("/post/<int:post_id>/comment", methods=["POST"])
@@ -156,6 +197,8 @@ def add_comment(post_id):
 @app.route("/c/<string:community_name>/p/<string:post_slug>", methods=["GET", "POST"])
 def post_detail(community_name, post_slug):
     post = Post.query.filter_by(slug=post_slug).first()
+    post_content = markdown.markdown(post.content)
+    print(post_content)
     if post is None:
         return "Post not found!", 404
 
@@ -182,9 +225,14 @@ def post_detail(community_name, post_slug):
     community = Community.query.filter_by(name=community_name).first()
     if community is None:
         return "Community not found!", 404
+    community_id = community.id
 
     return render_template(
-        "post_detail.html", post=post, comments=comments, community=community
+        "post_detail.html",
+        post=post,
+        comments=comments,
+        community=community,
+        community_id=community_id,
     )
 
 
@@ -203,6 +251,7 @@ def edit_post(post_id):
         # Update the post content with the submitted form data
         post.title = request.form.get("title")
         post.content = request.form.get("content")
+        print(post.content)
         db.session.commit()
         return redirect(
             url_for(
@@ -300,7 +349,14 @@ def community_posts(community_name):
     if community is None:
         return "Community not found!", 404
     posts = Post.query.filter_by(community_id=community.id).all()
-    return render_template("community_posts.html", community=community, posts=posts)
+    community_id = community.id
+    print(community_id)
+    return render_template(
+        "community_posts.html",
+        community=community,
+        posts=posts,
+        community_id=community_id,
+    )
 
 
 @app.route("/e/<string:community_slug>/join", methods=["POST"])
@@ -325,13 +381,17 @@ def upvote_post(community_name, post_slug):
     vote = Vote.query.filter_by(user_id=user.id, post_id=post.id).first()
     if vote is None:
         vote = Vote(user_id=user.id, post_id=post.id, vote_value=1)
+        post.upvotes += 1
         db.session.add(vote)
     else:
-        vote.vote_value = 0 if vote.vote_value == 1 else 1
+        if vote.vote_value == 1:
+            vote.vote_value = 0
+            post.upvotes -= 1
+        else:
+            vote.vote_value = 1
+            post.upvotes += 1
     db.session.commit()
-    return redirect(
-        url_for("post_detail", community_name=community_name, post_slug=post_slug)
-    )
+    return {"score": post.score}, 200
 
 
 @app.route(
@@ -345,13 +405,17 @@ def downvote_post(community_name, post_slug):
     vote = Vote.query.filter_by(user_id=user.id, post_id=post.id).first()
     if vote is None:
         vote = Vote(user_id=user.id, post_id=post.id, vote_value=-1)
+        post.downvotes += 1
         db.session.add(vote)
     else:
-        vote.vote_value = 0 if vote.vote_value == -1 else -1
+        if vote.vote_value == -1:
+            vote.vote_value = 0
+            post.downvotes -= 1
+        else:
+            vote.vote_value = -1
+            post.downvotes += 1
     db.session.commit()
-    return redirect(
-        url_for("post_detail", community_name=community_name, post_slug=post_slug)
-    )
+    return {"score": post.score}, 200
 
 
 @app.route("/user/<string:username>/posts")

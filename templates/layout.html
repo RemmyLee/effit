@@ -5,7 +5,7 @@
     <title>Effit</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplemde@1.11.2/dist/simplemde.min.css">
-    <script src="/static/showdown.min.js"></script>
+    <script src="{{ url_for('static', filename='showdown.min.js') }}"></script>
     <script src="/static/simplemde.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -36,21 +36,20 @@
                     <h2>Create a Community</h2>
                     <form action="/create_community" method="post">
                         <label for="name">Name:</label><br>
-                        <input type="text" id="name" name="name"><br>
+                        <input type="text" id="name" name="name" value="{{ request.form.name | escape }}"><br>
                         <label for="description">Description:</label><br>
-                        <textarea id="description" name="description"></textarea><br>
+                        <textarea id="description" name="description">{{ request.form.description | escape }}</textarea><br>
                         <input type="submit" value="Create">
                     </form>
                 </div>
                 <div class="create-form">
-                    <h2>Create a Post</h2>
-                    <form action="/post" method="post">
-                        <label for="title">Title:</label><br>
-                        <input type="text" id="title" name="title"><br>
-                        <label for="content">Content:</label><br>
-                        <textarea id="description" name="content"></textarea><br>
-                        <input type="hidden" name="community_id" value="{{ default_community_id }}">
-                        <input type="submit" value="Create">
+                    <form action="{{ url_for('create_post') }}" method="post">
+                    {% if community_id %}
+                    <input type="hidden" name="community_id" value="{{ community_id }}">
+                    {% else %}
+                    <input type="hidden" name="community_id" value="{{ default_community_id }}">
+                    {% endif %}
+                    <input type="submit" value="Create Post">
                     </form>
                 </div>
                 {% else %}

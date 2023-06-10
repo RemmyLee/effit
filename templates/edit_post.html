@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}
+<title>Edit Post - Effit</title>
+{% endblock %}
+
+{% block content %}
+<h2>Edit Post</h2>
+<form action="{{ url_for('edit_post', post_id=post.id) }}" method="post">
+    <label for="title">Title:</label><br>
+    <input type="text" id="title" name="title" value="{{ post.title }}"><br>
+    <label for="content">Content:</label><br>
+    <textarea id="description" name="content">{{ post.content }}</textarea><br>
+    <input type="submit" value="Update">
+</form>
+<script>
+    var converter = new showdown.Converter();
+    var descriptionTextarea = document.getElementById("description");
+    var simpleMDE = new SimpleMDE({
+        element: descriptionTextarea,
+        previewRender: function (plainText) {
+            return converter.makeHtml(plainText);
+        }
+    });
+</script>
+{% endblock %}

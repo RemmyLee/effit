@@ -18,12 +18,20 @@
 <div id="posts">
     <h2>All Posts</h2>
     {% for post in posts %}
-    <div class="post-item">
+    <div class="post-item" id="post-{{ post.id }}">
         <div class="post">
             <div class="vote">
-                <button class="upvote" onclick="vote('{{ post.id }}', 'upvote')">↑</button>
+                <button class="upvote" onclick="vote('{{ post.id }}', '{{ post.slug }}', '{{ post.community.name }}', 'upvote')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                      <path d="M7.247 4.86l-4.796 5.481c-.646.74.037 1.659.877 1.659h9.392c.839 0 1.523-.92.877-1.659l-4.796-5.48a1 1 0 0 0-1.554 0z"/>
+                    </svg>
+                </button>
                 <span class="score">{{ post.score }}</span>
-                <button class="downvote" onclick="vote('{{ post.id }}', 'downvote')">↓</button>
+                <button class="downvote" onclick="vote('{{ post.id }}', '{{ post.slug }}', '{{ post.community.name }}', 'downvote')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                      <path d="M7.247 11.14l-4.796-5.481c-.646-.74.037-1.659.877-1.659h9.392c.839 0 1.523.92.877 1.659l-4.796 5.481a1 1 0 0 1-1.554 0z"/>
+                    </svg>
+                </button>
             </div>
             <div class="post-info">
                 <h3><a class="title may-blank loggedin" href="{{ url_for('post_detail', community_name=post.community.name, post_slug=post.slug) }}">{{ post.title }}</a></h3>
@@ -52,4 +60,29 @@
     </div>
     {% endfor %}
 </div>
+<script>
+    function vote(postId, postSlug, communityName, action) {
+        $.ajax({
+            url: `/post/${communityName}/${postSlug}/${action}`,
+            method: 'POST',
+            success: function(data) {
+                // Update the score on the page
+                $(`#post-${postId} .score`).text(data.score);
+                // Add 'clicked' class to the clicked arrow and remove it from the other one
+                if (action === 'upvote') {
+                    $(`#post-${postId} .upvote`).addClass('clicked');
+                    $(`#post-${postId} .downvote`).removeClass('clicked');
+                } else if (action === 'downvote') {
+                    $(`#post-${postId} .upvote`).removeClass('clicked');
+                    $(`#post-${postId} .downvote`).addClass('clicked');
+                }
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+    </script>
+    
+    
 {% endblock %}

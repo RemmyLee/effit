@@ -5,12 +5,20 @@
 {% endblock %}
 
 {% block content %}
-<div class="post-item">
+<div class="post-item" id="post-{{ post.id }}">
     <div class="post">
         <div class="vote">
-            <button class="upvote" onclick="vote('{{ post.id }}', 'upvote')">↑</button>
+            <button class="upvote" onclick="vote('{{ post.id }}', '{{ post.slug }}', '{{ post.community.name }}', 'upvote')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                  <path d="M7.247 4.86l-4.796 5.481c-.646.74.037 1.659.877 1.659h9.392c.839 0 1.523-.92.877-1.659l-4.796-5.48a1 1 0 0 0-1.554 0z"/>
+                </svg>
+            </button>
             <span class="score">{{ post.score }}</span>
-            <button class="downvote" onclick="vote('{{ post.id }}', 'downvote')">↓</button>
+            <button class="downvote" onclick="vote('{{ post.id }}', '{{ post.slug }}', '{{ post.community.name }}', 'downvote')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                  <path d="M7.247 11.14l-4.796-5.481c-.646-.74.037-1.659.877-1.659h9.392c.839 0 1.523.92.877 1.659l-4.796 5.481a1 1 0 0 1-1.554 0z"/>
+                </svg>
+            </button>
         </div>
         <div class="post-info">
             <h3><a class="title may-blank loggedin" href="{{ url_for('post_detail', community_name=post.community.name, post_slug=post.slug) }}">{{ post.title }}</a></h3>
@@ -34,24 +42,33 @@
                 <li class="crosspost-button"><a class="post-crosspost-button">crosspost</a></li>
             </ul>
         </div>
-        
+    </div>
+    <div class="post-content">
+        {{ post.content|safe }}
     </div>
 </div>
 
 {% if "username" in session and session["username"] == post.author.username %}
 <div class="post-actions">
-    <form action="{{ url_for('delete_post', post_id=post.id) }}" method="post">
-        <button type="submit" class="btn btn-danger">Delete</button>
-    </form>
-    <a href="{{ url_for('edit_post', post_id=post.id) }}" class="btn btn-primary">Edit</a>
+    <ul class="flat-list buttons">
+        <li>
+            <form action="{{ url_for('delete_post', post_id=post.id) }}" method="post">
+                <button type="submit" class="btn btn-link">Delete</button>
+            </form>
+        </li>
+        <li>
+            <a href="{{ url_for('edit_post', post_id=post.id) }}" class="btn btn-link">Edit</a>
+        </li>
+    </ul>
 </div>
 {% endif %}
 
 <div class="comments">
     {% for comment in comments %}
+    <p class="tagline">
+        <span>{{ comment.author.username }}</span></p>
     <div class="comment">
-        <p>{{ comment.content|safe }}</p>
-        <p>Commented by: {{ comment.author.username }}</p>
+        {{ comment.content|safe }}
     </div>
     {% endfor %}
 </div>
@@ -73,21 +90,21 @@
     });
 </script>
 <script>
-    function vote(postId, action) {
-        // Perform a fetch or AJAX request to your server here. 
-        // You will need to pass the postId and action ('upvote' or 'downvote') to the server.
-        // Once the server responds, update the score on the page.
-        fetch(`/vote?postId=${postId}&action=${action}`)
-            .then(response => response.json())
-            .then(data => {
-                // Assuming the server returns a JSON object with the new score
-                document.querySelector(`#score-${postId}`).textContent = data.newScore;
-            })
-            .catch(error => {
+    function vote(postId, postSlug, communityName, action) {
+        $.ajax({
+            url: `/post/${communityName}/${postSlug}/${action}`,
+            method: 'POST',
+            success: function(data) {
+                // Update the score on the page
+                $(`#post-${postId} .score`).text(data.score);
+            },
+            error: function(error) {
                 console.error('Error:', error);
-            });
+            }
+        });
     }
     </script>
+    
 {% endblock %}
 
 

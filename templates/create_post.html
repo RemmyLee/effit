@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}
+<title>Create Post - Effit</title>
+{% endblock %}
+
+{% block content %}
+<h2>Create Post</h2>
+<form action="/post" method="post">
+    <label for="title">Title:</label><br>
+    <input type="text" id="title" name="title"><br>
+    <label for="content">Content:</label><br>
+    <textarea id="description" name="content"></textarea><br>
+    {% if community_id %}
+    <input type="hidden" name="community_id" value="{{ community_id }}">
+    {% else %}
+    <input type="hidden" name="community_id" value="{{ default_community_id }}">
+    {% endif %}
+    <input type="submit" value="Create">
+</form>
+<script>
+    var converter = new showdown.Converter();
+    var descriptionTextarea = document.getElementById("description");
+    var simpleMDE = new SimpleMDE({
+        element: descriptionTextarea,
+        previewRender: function (plainText) {
+            return converter.makeHtml(plainText);
+        }
+    });
+</script>
+{% endblock %}
