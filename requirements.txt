@@ -1,0 +1,9 @@
+alembic==1.11.1
+Flask==2.3.2
+Flask_Migrate==4.0.4
+flask_sqlalchemy==3.0.3
+Markdown==3.4.3
+python-dotenv==1.0.0
+python-slugify==8.0.1
+SQLAlchemy==1.4.46
+Werkzeug==2.3.4
