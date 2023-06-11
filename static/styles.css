@@ -189,8 +189,12 @@ nav ul li a:hover {
 
 .toggle-button {
   cursor: pointer;
-  color: blue; /* or any other color you prefer */
+  color: black; /* or any other color you prefer */
   text-decoration: underline; /* or any other visual indicator */
+}
+
+.toggle-button:hover {
+  color: #336699;
 }
 
 /* Styling for the main content */
@@ -302,6 +306,22 @@ main {
   padding: 0;
   display: flex;
   align-items: center;
+}
+
+.reply-button {
+  /* align the button the left of the comment */
+  margin-right: auto;
+  margin-top: 0px;
+  padding: 3px 8px;
+  font-size: smaller;
+  line-height: 1;
+  color: #336699;
+  text-decoration: none;
+  background-color: transparent;
+  border: 1px solid #cccccc;
+  border-radius: 3px;
+  transition: background-color 0.2s ease;
+  margin-bottom: 16px;
 }
 
 .flat-list.buttons li {
