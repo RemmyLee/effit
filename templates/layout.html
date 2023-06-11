@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,7 +7,6 @@
     <script src="{{ url_for('static', filename='showdown.min.js') }}"></script>
     <script src="/static/simplemde.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
 </head>
 <body>
     <nav>
@@ -33,16 +31,6 @@
             <div id="sidebar">
                 {% if 'username' in session %}
                 <div class="create-form">
-                    <h2>Create a Community</h2>
-                    <form action="/create_community" method="post">
-                        <label for="name">Name:</label><br>
-                        <input type="text" id="name" name="name" value="{{ request.form.name | escape }}"><br>
-                        <label for="description">Description:</label><br>
-                        <textarea id="description" name="description">{{ request.form.description | escape }}</textarea><br>
-                        <input type="submit" value="Create">
-                    </form>
-                </div>
-                <div class="create-form">
                     <form action="{{ url_for('create_post') }}" method="post">
                     {% if community_id %}
                     <input type="hidden" name="community_id" value="{{ community_id }}">
@@ -52,6 +40,24 @@
                     <input type="submit" value="Create Post">
                     </form>
                 </div>
+                <hr>
+                <div class="create-form">
+                    <form action="{{ url_for('create_community') }}" method="get">
+                        <input type="submit" value="Create Community">
+                    </form>
+                </div>
+                
+                <!-- Show community description when visiting a community -->
+                {% if community_description_markdown %}
+                <div id="community-description-markdown" style="display: none;">{{ community_description_markdown | escape }}</div>
+                <div id="community-description-html"></div>
+                <script>
+                    var converter = new showdown.Converter(),
+                        text = document.getElementById('community-description-markdown').innerText,
+                        html = converter.makeHtml(text);
+                    document.getElementById('community-description-html').innerHTML = html;
+                </script>
+                {% endif %}
                 {% else %}
                 <p>You must be logged in to create a post or community!</p>
                 {% endif %}

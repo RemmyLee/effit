@@ -396,6 +396,7 @@ def community_posts(community_name):
         community=community,
         posts=posts,
         community_id=community_id,
+        community_description_markdown=community.description,
     )
 
 

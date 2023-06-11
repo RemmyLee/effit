@@ -145,6 +145,7 @@ a:hover {
   flex: 1;
   margin-right: 20px;
   order: 1;
+  height: 30px;
 }
 
 /* Styling for the navigation */
@@ -186,6 +187,11 @@ nav ul li a:hover {
     color: #ffffff;
 }
 
+.toggle-button {
+  cursor: pointer;
+  color: blue; /* or any other color you prefer */
+  text-decoration: underline; /* or any other visual indicator */
+}
 
 /* Styling for the main content */
 main {

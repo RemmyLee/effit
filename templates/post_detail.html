@@ -74,30 +74,34 @@
 {% endif %}
 
 {% macro render_comment(comment, level=0) %}
-<div style="margin-left: {{ level * 7 }}px;">  {# Indent comments based on their level of nesting #}
+<div id="comment-{{ comment.id }}" style="margin-left: {{ level * 7 }}px;" class="comment-container">  {# Indent comments based on their level of nesting #}
     <p class="tagline">
-        <span>[-] <a href="{{ url_for('user_posts', username=comment.author.username) }}" class="author may-blank id-t2_d2kpf">{{ comment.author.username }}</a></span>
+        <span>
+            <a href="javascript:void(0)" class="toggle-button" onclick="toggleComments('comment-{{ comment.id }}')">[-]</a> 
+            <a href="{{ url_for('user_posts', username=comment.author.username) }}" class="author may-blank id-t2_d2kpf">{{ comment.author.username }}</a>
+        </span>
     </p>
-    <div class="comment">
-        {{ comment.content|safe }}
-    </div>
-    <button class="reply-button">Reply</button>  {# New reply button #}
-    <form class="reply-form" id="reply-form-{{ comment.id }}" action="{{ url_for('add_comment', post_id=post.id) }}" method="post" style="display: none;">
-        <textarea name="content" rows="2" placeholder="Write a reply..."></textarea>
-        <input type="hidden" name="parent_id" value="{{ comment.id }}" />
-        <input type="submit" value="Submit">
-    </form>    
-    <div class="replies">
-        {% for reply in comment.children %}
-        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-            <path d="M7.247 11.14l-4.796-5.481c-.646-.74.037-1.659.877-1.659h9.392c.839 0 1.523.92.877 1.659l-4.796 5.481a1 1 0 0 1-1.554 0z"/>
-          </svg>
+    <div id="comment-body-{{ comment.id }}" class="comment-body">
+        <div class="comment">
+            {{ comment.content|safe }}
+        </div>
+        <button class="reply-button">Reply</button>  {# New reply button #}
+        <form class="reply-form" id="reply-form-{{ comment.id }}" action="{{ url_for('add_comment', post_id=post.id) }}" method="post" style="display: none;">
+            <textarea name="content" rows="2" placeholder="Write a reply..."></textarea>
+            <input type="hidden" name="parent_id" value="{{ comment.id }}" />
+            <input type="submit" value="Submit">
+        </form>
+        <div class="replies">
+            {% for reply in comment.children %}
+            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                <path d="M7.247 11.14l-4.796-5.481c-.646-.74.037-1.659.877-1.659h9.392c.839 0 1.523.92.877-1.659l-4.796-5.481a1 1 0 0 1-1.554 0z"/>
+            </svg>
             {{ render_comment(reply, level + 1) }}  {# Recursively render the reply, increasing the level by 1 #}
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
 </div>
 {% endmacro %}
-
 
 <div class="comments">
     {% for comment in comments %}
@@ -105,10 +109,9 @@
     {% endfor %}
 </div>
 
-
 <form action="{{ url_for('add_comment', post_id=post.id) }}" method="post">
     <div class="comment-form">
-        <textarea id="comment-textarea" name="content" rows="4" placeholder="Add a comment..."></textarea>
+        <textarea id="comment-textarea" name="content" placeholder="Add a comment..."></textarea>
         <input type="hidden" id="parent-id" name="parent_id" value="" />
         <input type="submit" value="Submit">
     </div>
@@ -153,11 +156,19 @@
             });
         });
     });
+
+    function toggleComments(commentId) {
+    let commentBody = document.getElementById(commentId).querySelector('.comment-body');
+    let toggleButton = document.querySelector('#' + commentId + ' .toggle-button');
+
+    if (commentBody.style.display === 'none') {
+        commentBody.style.display = 'block';
+        toggleButton.textContent = '[-]';
+    } else {
+        commentBody.style.display = 'none';
+        toggleButton.textContent = '[+]';
+    }
+}
+
 </script>
-
-    
 {% endblock %}
-
-
-
-
