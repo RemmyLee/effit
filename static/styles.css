@@ -322,6 +322,7 @@ main {
   border-radius: 3px;
   transition: background-color 0.2s ease;
   margin-bottom: 16px;
+  cursor: pointer;
 }
 
 .flat-list.buttons li {
@@ -391,6 +392,7 @@ main {
 
 .create-form {
   margin-bottom: 20px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .create-form h2 {
@@ -420,6 +422,8 @@ main {
   color: #ffffff;
   border: none;
   cursor: pointer;
+  font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.2s ease;
 }
 
 .create-form input[type="submit"]:hover {
