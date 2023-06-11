@@ -21,9 +21,9 @@ button {
 }
 
 body {
-  background-color: #ffffff;
+  background-color: #f5f8fa;
   color: #000000;
-  font: normal x-small verdana,arial,helvetica,sans-serif;
+  font: normal x-small Arial, sans-serif;
   font-style: normal;
   font-variant-caps: normal;
   font-weight: normal;
@@ -46,10 +46,11 @@ body {
 }
 
 #header {
-  background-color: #cee3f8;
-  padding: 10px 0;
+  background-color: #0079d3;
+  padding: 10px;
   text-align: center;
 }
+
 
 .post,
 .comment {
@@ -61,6 +62,7 @@ body {
   font-family: Arial,sans-serif;
   display: flex; /* add this */
   align-items: start; /* add this */
+  border-radius: 5px;
 }
 
 .post h3,

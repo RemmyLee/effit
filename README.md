@@ -25,3 +25,4 @@ Register:
 
 Login:
 ![image](https://github.com/RemmyLee/effit/assets/2806556/7e3b2683-4d9e-4e6c-89c4-9efc7406c5db)
+
