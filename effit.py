@@ -67,7 +67,11 @@ class Comment(db.Model):
     content = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey("post.id"), nullable=False)
+    parent_id = db.Column(db.Integer, db.ForeignKey("comment.id"), nullable=True)
     author = db.relationship("User", backref=db.backref("comments", lazy=True))
+    children = db.relationship(
+        "Comment", backref=db.backref("parent", remote_side=[id]), lazy="dynamic"
+    )
 
 
 class Community(db.Model):
@@ -122,8 +126,13 @@ def post():
     if "username" not in session:
         return "You must be logged in to post!", 401
     title = request.form.get("title")
+    print(f"Title: {title}")
     link = request.form.get("link")
-    is_link_post = bool(link)
+    print(f"Link: {link}")
+    if link:
+        is_link_post = 1
+    else:
+        is_link_post = 0
     print(f"Link: {link}, is_link_post: {is_link_post}")
     slug = slugify(title)
     content = request.form.get("content")
@@ -139,6 +148,7 @@ def post():
         content=content,
         user_id=user.id,
         community_id=community_id,
+        is_link_post=is_link_post,
     )
     db.session.add(post)
     db.session.commit()
@@ -199,8 +209,14 @@ def add_comment(post_id):
     if "username" not in session:
         return "You must be logged in to comment!", 401
     content = request.form.get("content")
+    parent_id = request.form.get("parent_id")  # Get parent_id from the form
     user = User.query.filter_by(username=session["username"]).first()
-    comment = Comment(content=content, user_id=user.id, post_id=post_id)
+    comment = Comment(
+        content=content,
+        user_id=user.id,
+        post_id=post_id,
+        parent_id=parent_id if parent_id else None,
+    )  # Set parent_id for the comment
     db.session.add(comment)
     db.session.commit()
     post = Post.query.get(post_id)
@@ -233,10 +249,17 @@ def post_detail(community_name, post_slug):
             post.content = content
             db.session.commit()
 
-    comments = Comment.query.filter_by(post_id=post.id).all()
-    post.content = markdown.markdown(post.content)
+    comments = Comment.query.filter(
+        Comment.post_id == post.id, Comment.parent_id.is_(None)
+    ).all()
     for comment in comments:
         comment.content = markdown.markdown(comment.content)
+
+        comment.replies = Comment.query.filter(Comment.post_id == post.id)
+        for reply in comment.replies:
+            reply.content = markdown.markdown(reply.content)
+
+    post.content = markdown.markdown(post.content)
 
     community = Community.query.filter_by(name=community_name).first()
     if community is None:

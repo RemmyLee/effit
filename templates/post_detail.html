@@ -27,8 +27,12 @@
                 {% else %}
                 <a class="title may-blank loggedin" href="/c/{{ community.name }}/p/{{ post.slug }}">{{ post.title }}</a>
                 {% endif %}
-                </h3>                
-            <span class="domain">(<a href="{{ url_for('community_posts', community_name=post.community.name) }}">self.{{ post.community.name }}</a>)</span>
+                </h3>
+                {% if post.is_link_post %}
+                <span class="domain">(<a href="{{ post.link }}">{{ post.link }}</a>)</span>
+                {% else %}
+                <span class="domain">(<a href="{{ url_for('community_posts', community_name=post.community.name) }}">self.{{ post.community.name }}</a>)</span>
+                {% endif %}
             <p class="tagline">
                 <span>{{ post.score }} points</span> 
                 submitted <time datetime="{{ post.created_at.isoformat() }}">{{ post.created_at }}</time>
@@ -69,22 +73,47 @@
 </div>
 {% endif %}
 
-<div class="comments">
-    {% for comment in comments %}
+{% macro render_comment(comment, level=0) %}
+<div style="margin-left: {{ level * 7 }}px;">  {# Indent comments based on their level of nesting #}
     <p class="tagline">
-        <span>{{ comment.author.username }}</span></p>
+        <span>{{ comment.author.username }}</span>
+    </p>
     <div class="comment">
         {{ comment.content|safe }}
     </div>
+    <button class="reply-button">Reply</button>  {# New reply button #}
+    <form class="reply-form" id="reply-form-{{ comment.id }}" action="{{ url_for('add_comment', post_id=post.id) }}" method="post" style="display: none;">
+        <textarea name="content" rows="2" placeholder="Write a reply..."></textarea>
+        <input type="hidden" name="parent_id" value="{{ comment.id }}" />
+        <input type="submit" value="Submit">
+    </form>    
+    <div class="replies">
+        {% for reply in comment.children %}
+        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+            <path d="M7.247 11.14l-4.796-5.481c-.646-.74.037-1.659.877-1.659h9.392c.839 0 1.523.92.877 1.659l-4.796 5.481a1 1 0 0 1-1.554 0z"/>
+          </svg>
+            {{ render_comment(reply, level + 1) }}  {# Recursively render the reply, increasing the level by 1 #}
+        {% endfor %}
+    </div>
+</div>
+{% endmacro %}
+
+
+<div class="comments">
+    {% for comment in comments %}
+        {{ render_comment(comment)|safe }}
     {% endfor %}
 </div>
+
 
 <form action="{{ url_for('add_comment', post_id=post.id) }}" method="post">
     <div class="comment-form">
         <textarea id="comment-textarea" name="content" rows="4" placeholder="Add a comment..."></textarea>
+        <input type="hidden" id="parent-id" name="parent_id" value="" />
         <input type="submit" value="Submit">
     </div>
 </form>
+
 <script>
     var converter = new showdown.Converter();
     var commentTextarea = document.getElementById("comment-textarea");
@@ -94,8 +123,7 @@
             return converter.makeHtml(plainText);
         }
     });
-</script>
-<script>
+
     function vote(postId, postSlug, communityName, action) {
         $.ajax({
             url: `/post/${communityName}/${postSlug}/${action}`,
@@ -109,7 +137,24 @@
             }
         });
     }
-    </script>
+
+    document.querySelectorAll('.reply-button').forEach(function(button) {
+        button.addEventListener('click', function() {
+            var form = this.nextElementSibling;  // The reply form is the next sibling of the reply button
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';  // Toggle visibility
+
+            // Initialize SimpleMDE for the textarea in this form
+            var textarea = form.querySelector('textarea');
+            new SimpleMDE({
+                element: textarea,
+                previewRender: function (plainText) {
+                    return converter.makeHtml(plainText);
+                }
+            });
+        });
+    });
+</script>
+
     
 {% endblock %}
 
