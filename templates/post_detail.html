@@ -76,7 +76,7 @@
 {% macro render_comment(comment, level=0) %}
 <div style="margin-left: {{ level * 7 }}px;">  {# Indent comments based on their level of nesting #}
     <p class="tagline">
-        <span>{{ comment.author.username }}</span>
+        <span><a href="{{ url_for('user_posts', username=post.author.username) }}" class="author may-blank id-t2_d2kpf">{{ post.author.username }}</a></span>
     </p>
     <div class="comment">
         {{ comment.content|safe }}
