@@ -6,23 +6,24 @@ It is incomplete, but functional for the most part. Time permitting or
 interest may lead to a much more featured package.
 
 Front Page:
-![image](https://github.com/RemmyLee/effit/assets/2806556/90db2eae-26ea-43c1-8f9a-ccda541452a8)
+![image](https://github.com/RemmyLee/effit/assets/2806556/fb3b5892-ba1c-485d-becb-dd1eabcbcabb)
 
 Post page:
-![image](https://github.com/RemmyLee/effit/assets/2806556/66a94dc7-7de4-468c-8da8-ab84f1e6f2be)
+![image](https://github.com/RemmyLee/effit/assets/2806556/6e456624-82d7-4eb1-b63b-9bf2b73d0815)
 
 Community Page:
-![image](https://github.com/RemmyLee/effit/assets/2806556/77cde4e6-f523-4fbb-a801-bd1891230e87)
+![image](https://github.com/RemmyLee/effit/assets/2806556/979e1e6b-fdbc-44a0-8438-d399f8ed4887)
 
 Profile Page:
-![image](https://github.com/RemmyLee/effit/assets/2806556/1e0f5c04-6504-4809-b29e-86c1fe1f1175)
+![image](https://github.com/RemmyLee/effit/assets/2806556/8ff990eb-c8e7-4bbf-a4c5-6fa0ff924be1)
 
 Create a Post:
-![image](https://github.com/RemmyLee/effit/assets/2806556/94fcbe66-65a0-44b0-a7f4-6bab5f039621)
+![image](https://github.com/RemmyLee/effit/assets/2806556/7f21dd31-7352-4a0e-abd9-f167040bfd2a)
 
 Register:
-![image](https://github.com/RemmyLee/effit/assets/2806556/8929bd44-ee8f-44f0-97a6-cb539635fb5b)
+![image](https://github.com/RemmyLee/effit/assets/2806556/91529f60-62c1-4659-86ff-a8a4327b8a89)
 
 Login:
-![image](https://github.com/RemmyLee/effit/assets/2806556/7e3b2683-4d9e-4e6c-89c4-9efc7406c5db)
+![image](https://github.com/RemmyLee/effit/assets/2806556/74de81ae-10c7-47d5-af2e-c2e01328ce78)
+
 
